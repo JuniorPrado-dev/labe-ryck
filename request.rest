@@ -1,0 +1,10 @@
+GET http://localhost:3003/
+###
+POST  http://localhost:3003/user/singup
+content-type: application/json
+
+{
+    "name": "jr P",
+    "email": "juniorcvnnn@gmail.com",
+    "password":"hakunabatata"
+}

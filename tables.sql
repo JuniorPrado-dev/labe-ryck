@@ -1,28 +1,18 @@
+-- Active: 1683300286603@@127.0.0.1@3306
+DROP TABLE users;
+DROP TABLE characters;
 
-CREATE TABLE IF NOT EXISTS Auth_users (
+CREATE TABLE IF NOT EXISTS users (
     id VARCHAR(64) PRIMARY KEY,
-    name VARCHAR(64) NOT NULL,
-    nickname VARCHAR(64) NOT NULL,
-    email VARCHAR(64) NOT NULL,
-    password VARCHAR(64) NOT NULL
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    password VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS Auth_tasks (
+CREATE TABLE IF NOT EXISTS characters (
     id VARCHAR(64) PRIMARY KEY,
-    title VARCHAR(64) NOT NULL,
-    description VARCHAR(1024) DEFAULT "No description provided",
-    deadline DATE,
-    status ENUM("TO_DO", "DOING", "DONE") DEFAULT "TO_DO",
-    author_id VARCHAR(64),
-    FOREIGN KEY (author_id) REFERENCES Auth_users(id)
+    name VARCHAR(100) NOT NULL,
+    species VARCHAR(100) NOT NULL,
+    image_url TEXT NOT NULL,
+    id_user VARCHAR(100) NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS Auth_assignees (
-    task_id VARCHAR(64),
-    assignee_id VARCHAR(64),
-    PRIMARY KEY (task_id, assignee_id),
-    FOREIGN KEY (task_id) REFERENCES Auth_tasks(id),
-    FOREIGN KEY (assignee_id) REFERENCES Auth_users(id)
-);
-
-ALTER TABLE Auth_users ADD role ENUM("ADMIN","NORMAL") NOT NULL DEFAULT "NORMAL";

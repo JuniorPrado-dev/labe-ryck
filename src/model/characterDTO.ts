@@ -1,5 +1,20 @@
-export interface LoginInputDTO {
-   email: string,
+export interface CharacterCreateInputDTO {
+   name: string;
+   species: string;
+   token: string;
+   imageUrl:string;
+}   
+
+export interface CharacterDTO {
+   id: string;
+   name: string;
+   species: string;
+   token: string;
+   image_url:string;
+}
+
+export interface AuthenticationData {
+   email: string;
 }
 
 
@@ -15,22 +30,6 @@ export interface LoginInputDTO {
 
 
 
-
-
-
-
-
-
-
-
-export type user = {
-   id: string
-   email: string
-   password: string
-   name: string
-   nickname: string
-   role: string
-}
 
 export interface UserInputDTO {
    name: string,
@@ -58,9 +57,4 @@ export interface EditUserInput {
    name: string,
    nickname: string,
    id: string
-}
-
-export interface AuthenticationData {
-   id: string,
-   role: string
 }

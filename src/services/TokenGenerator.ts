@@ -1,19 +1,18 @@
 import * as jwt from 'jsonwebtoken'
 import { Unauthorized } from '../error/customError'
-import { AuthenticationData } from '../model/api'
 
 export class TokenGenerator {
 
-    public generateToken = (id: string, role: string) => {
+    public generateToken = (id: string) => {
         const token = jwt.sign(
-            { id, role },
+            { id },
             process.env.JWT_KEY as string,
-            { expiresIn: "1h" }
+            { expiresIn: "1d" }
         )
         return token
     }
 
-    public tokenData = (token: string): AuthenticationData => {
+    public tokenData = (token: string) => {
         // const payload = jwt.verify(
         //     token,
         //     process.env.JWT_KEY as string
@@ -23,8 +22,8 @@ export class TokenGenerator {
             const payload = jwt.verify(
                 token,
                 process.env.JWT_KEY as string
-            ) as AuthenticationData;
-            return payload;
+            );
+            return {payload};
         } catch (error: any) {
             console.log(error.message)
             throw new Unauthorized()
