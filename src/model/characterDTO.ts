@@ -2,15 +2,21 @@ export interface CharacterCreateInputDTO {
    name: string;
    species: string;
    token: string;
-   imageUrl:string;
+   image:string;
+}   
+export interface CharacterOutputDTO {
+   id:string;
+   name: string;
+   species: string;
+   image:string;
 }   
 
 export interface CharacterDTO {
    id: string;
    name: string;
    species: string;
-   token: string;
-   image_url:string;
+   image:string;
+   id_user:string;
 }
 
 export interface AuthenticationData {

@@ -1,9 +1,10 @@
 import * as jwt from 'jsonwebtoken'
 import { Unauthorized } from '../error/customError'
+import { ValidateDTO } from '../model/userDTO'
 
 export class TokenGenerator {
 
-    public generateToken = (id: string) => {
+    static generateToken = (id: string) => {
         const token = jwt.sign(
             { id },
             process.env.JWT_KEY as string,
@@ -12,18 +13,13 @@ export class TokenGenerator {
         return token
     }
 
-    public tokenData = (token: string) => {
-        // const payload = jwt.verify(
-        //     token,
-        //     process.env.JWT_KEY as string
-        // ) as jwt.JwtPayload
-        // return {id: payload.id as string,role:payload.role as string}
+    static tokenData = (token: string) => {
         try {
             const payload = jwt.verify(
                 token,
                 process.env.JWT_KEY as string
-            );
-            return {payload};
+            ) as ValidateDTO;
+            return payload ;
         } catch (error: any) {
             console.log(error.message)
             throw new Unauthorized()

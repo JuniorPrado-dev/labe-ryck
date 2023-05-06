@@ -1,25 +1,25 @@
 import { CustomError } from "../error/customError";
+import { CharacterDTO } from "../model/characterDTO";
 import { UserDTO } from "../model/userDTO";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class CharacterDatabase extends BaseDatabase {
   
-  public insertCharacter = async (user: UserDTO) => {
+  public createCharacter = async (character: CharacterDTO) => {
     try {
       await CharacterDatabase.connection
-        .insert(user)
-        .into("users");
+        .insert(character)
+        .into("characters");
     } catch (error: any) {
       throw new CustomError(400, error.message);
     }
   };
   
-  public allCharacter = async () => {
+  public getAllCharacter = async () => {
     try {
-  
-      const result = await CharacterDatabase.connection("chacters")
-        .select('*');
-      return result[0];
+      const result = await CharacterDatabase.connection.select('id','name','species','image').table("characters");
+      return result;
+
     } catch (error: any) {
       throw new CustomError(400, error.message);
     }

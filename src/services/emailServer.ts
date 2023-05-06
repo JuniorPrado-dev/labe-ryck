@@ -17,7 +17,7 @@ export const emailServer = async (email:string,name:string,password:string) => {
         const mailOptions = {
             from: 'laberick.token@gmail.com',
             to: `${email}`,
-            subject: `Token LabeRick!`,
+            subject: `Cadastro LabeRick!`,
             html: `
             <h1>Olá ${name}, seja bem vinde ao nsso planeta!</h1>
             <img style="width:60vw;" src="https://imagenes.elpais.com/resizer/PW7xvk0fMpr0nAZyQ_j9_PkUSsM=/1200x0/filters:focal(683x211:693x221)/cloudfront-eu-central-1.images.arcpublishing.com/prisa/Z6WN33YVLRCTPCATP7EAJ2ODLE.jpg" alt="Rick e Morty">

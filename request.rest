@@ -1,5 +1,5 @@
 GET http://localhost:3003/
-###
+###create user
 POST  http://localhost:3003/user/singup
 content-type: application/json
 
@@ -8,3 +8,25 @@ content-type: application/json
     "email": "juniorcvnnn@gmail.com",
     "password":"hakunabatata"
 }
+###login user
+POST  http://localhost:3003/user/login
+content-type: application/json
+
+{
+    "email": "juniorcvnnn@gmail.com",
+    "password":"hakunabatata"
+}
+
+### create character
+POST  http://localhost:3003/character/create
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiZWRkMDNkLTYwOTQtNDI3NS1hNzkzLWM2OGFjNzYyZTg3YiIsImlhdCI6MTY4MzMyODQ0OSwiZXhwIjoxNjgzNDE0ODQ5fQ.UFEzCMUbmbeOSIGc4B98WxBIra3d0SHkoL5bmr2MScY
+content-type: application/json
+
+{
+    "name":"Pumba",
+    "species":"Animal",
+    "image":"https://m.media-amazon.com/images/I/91MteSqsrJL.jpg"
+}
+
+### all characters
+GET  http://localhost:3003/character/all-characters

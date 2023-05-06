@@ -1,132 +1,56 @@
-// import { UserDatabase } from "../data/UserDatabase";
-// import { CustomError, InvalidCharacterInfos, InvalidEmail, UsedEmail } from "../error/customError";
-// import { CharacterCreateInputDTO } from "../model/characterDTO";
-// import { SingUpInputDTO, UserDTO} from "../model/userDTO";
-// import { HashManager } from "../services/HashManager";
-// import { IdGenerator } from "../services/IdGenerator";
-// import { TokenGenerator } from "../services/TokenGenerator";
-// import { emailServer } from "../services/emailServer";
+import { CharacterDatabase } from "../data/CharacterDatabase";
+import { CustomError, InvalidCharacterInfos, InvalidEmail, InvalidToken, UsedEmail } from "../error/customError";
+import { CharacterCreateInputDTO, CharacterDTO, CharacterOutputDTO } from "../model/characterDTO";
+import { IdGenerator } from "../services/IdGenerator";
+import { TokenGenerator } from "../services/TokenGenerator";
+import { getCharactersAPI } from "../services/apiChacters";
 
 
-// export class CharacterBusiness {
-  
-//   private userDatabase = new UserDatabase();
-//   private tokenGenerator = new TokenGenerator()
-  
-//   public insertCharacter = async (input: CharacterCreateInputDTO): Promise<void> => {
-//     try {
+export class CharacterBusiness {
 
-//       const { name, species, token, imageUrl} = input;
-//       if (!name||!species||!token||!imageUrl) {
-//         throw new InvalidCharacterInfos;
-//       }
-//       //verilica token
+    private characterDatabase = new CharacterDatabase();
 
-//       const userTest = await this.userDatabase.findUser(email);
+    public createCharacter = async (input: CharacterCreateInputDTO): Promise<void> => {
+        try {
+            console.log(input);
 
-//       if (userTest) {
-//         throw new UsedEmail();
-//       }
+            const { name, species, token, image } = input;
+            if (!name || !species || !token || !image) {
+                throw new InvalidCharacterInfos;
+            }
+            //verilica se token válido
+            const payload = TokenGenerator.tokenData(token);
+            if (!payload) {
+                throw new InvalidToken;
+            }
 
-//       //add novo user
-//       const user:UserDTO ={
-//         id: IdGenerator.generateId(),
-//         name,
-//         email,
-//         token
-//       } 
-//       await this.userDatabase.insertUser(user)
-//       //enviar email
-//       await emailServer(email,token);
-      
+            //add novo character
+            const character: CharacterDTO = {
+                id: IdGenerator.generateId(),
+                name,
+                species,
+                image: image,
+                id_user: payload.id
+            }
+            await this.characterDatabase.createCharacter(character)
 
-//     } catch (error: any) {
-//       throw new CustomError(400, error.message);
-//     }
-//   };
-//   // public createUser = async (input: UserInputDTO): Promise<string> => {
-//   //   try {
-//   //     const { name, nickname, email, password,role } = input;
-   
-//   //     if (!name || !nickname || !email || !password || !role) {
-//   //       throw new CustomError(
-//   //         400,
-//   //         'Preencha os campos "name","nickname", "email", "password" e "role"'
-//   //       );
-//   //     }
-
-//   //     if (name.length < 4) {
-//   //       throw new InvalidName();
-//   //     }
-
-//   //     if (!email.includes("@")) {
-//   //       throw new InvalidEmail();
-//   //     }
-
-//   //     if (role.toUpperCase() !== UserRole.ADMIN &&  role.toUpperCase() !== UserRole.NORMAL ){
-//   //         throw new InvalidRole();
-//   //     }
-
-//   //     const id: string = idGenerator.generateId()
-
-//   //     const hashPassword: string = await hashManager.generateHash(password) 
-
-//   //     const user: user = {
-//   //       id,
-//   //       name,
-//   //       nickname,
-//   //       email,
-//   //       password:hashPassword,
-//   //       role
-//   //     };
-   
-//   //     await userDatabase.insertUser(user);
-//   //     const token = tokenGenerator.generateToken(id,role)
-
-//   //     return token
-//   //   } catch (error: any) {
-//   //     throw new CustomError(400, error.message);
-//   //   }
-//   // };
-
-  
-
-//   // public editUser = async (input: EditUserInputDTO) => {
-//   //   try {
-//   //     const { name, nickname, id, token } = input;
-
-//   //     if (!name || !nickname || !id || !token) {
-//   //       throw new CustomError(
-//   //         400,
-//   //         'Preencha os campos "id", "name", "nickname" e "token"'
-//   //       );
-//   //     }
-
-//   //     const data = tokenGenerator.tokenData(token)
-
-//   //     // if(!data) {
-//   //     //   throw new Unauthorized()
-//   //     // }
-      
-//   //     if (name.length < 4) {
-//   //       throw new InvalidName();
-//   //     }
-//   //     //testa autorização
-//   //     if(data.role !=UserRole.ADMIN) {
-//   //       throw new Unauthorized()
-//   //     }
-
-
-//   //     const editUserInput: EditUserInput = {
-//   //       id,
-//   //       name,
-//   //       nickname,
-//   //     };
-
-//   //     const userDatabase = new UserDatabase();
-//   //     await userDatabase.editUser(editUserInput);
-//   //   } catch (error: any) {
-//   //     throw new CustomError(400, error.message);
-//   //   }
-//   // };
-// }
+        } catch (error: any) {
+            throw new CustomError(400, error.message);
+        }
+    };
+    //pega todos os personagens
+    public getAllCharacter = async (): Promise<CharacterOutputDTO[]> => {
+        try {
+            //personagens da api do rick morty
+            const charactersApi = await getCharactersAPI() as CharacterOutputDTO[];
+            //personagens do banco de dados
+            const allCharactersDB = await this.characterDatabase.getAllCharacter()
+            //todos os personagens
+            const allCharacters = [...allCharactersDB,...charactersApi]
+            
+            return allCharacters;
+        } catch (error: any) {
+            throw new CustomError(400, error.message);
+        }
+    };
+}

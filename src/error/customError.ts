@@ -8,6 +8,26 @@ export class InvalidEmail extends CustomError{
         super(422, "Email, senha ou nome inválidos!")
     }
 }
+export class InvalidPassword extends CustomError{ 
+    constructor(){
+        super(401, "Senha inválida!")
+    }
+}
+export class InvalidToken extends CustomError{ 
+    constructor(){
+        super(401, "Token inválido ou inspirado!")
+    }
+}
+export class UserNotFound extends CustomError{ 
+    constructor(){
+        super(404, "Pessoa Usuária não encontrada!")
+    }
+}
+export class InvalidLogin extends CustomError{ 
+    constructor(){
+        super(422, "Coloque email e senha!")
+    }
+}
 export class UsedEmail extends CustomError{ 
     constructor(){
         super(400, "Email já utilizado")

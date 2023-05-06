@@ -1,6 +1,7 @@
+import { InvalidPassword } from './../error/customError';
 import { UserDatabase } from "../data/UserDatabase";
-import { CustomError, InvalidEmail, UsedEmail } from "../error/customError";
-import { SingUpInputDTO, UserDTO} from "../model/userDTO";
+import { CustomError, InvalidEmail, InvalidLogin, UsedEmail, UserNotFound } from "../error/customError";
+import { LoginInputDTO, SingUpInputDTO, UserDTO} from "../model/userDTO";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenGenerator } from "../services/TokenGenerator";
@@ -43,89 +44,31 @@ export class UserBusiness {
       throw new CustomError(400, error.message);
     }
   };
-  // public createUser = async (input: UserInputDTO): Promise<string> => {
-  //   try {
-  //     const { name, nickname, email, password,role } = input;
-   
-  //     if (!name || !nickname || !email || !password || !role) {
-  //       throw new CustomError(
-  //         400,
-  //         'Preencha os campos "name","nickname", "email", "password" e "role"'
-  //       );
-  //     }
-
-  //     if (name.length < 4) {
-  //       throw new InvalidName();
-  //     }
-
-  //     if (!email.includes("@")) {
-  //       throw new InvalidEmail();
-  //     }
-
-  //     if (role.toUpperCase() !== UserRole.ADMIN &&  role.toUpperCase() !== UserRole.NORMAL ){
-  //         throw new InvalidRole();
-  //     }
-
-  //     const id: string = idGenerator.generateId()
-
-  //     const hashPassword: string = await hashManager.generateHash(password) 
-
-  //     const user: user = {
-  //       id,
-  //       name,
-  //       nickname,
-  //       email,
-  //       password:hashPassword,
-  //       role
-  //     };
-   
-  //     await userDatabase.insertUser(user);
-  //     const token = tokenGenerator.generateToken(id,role)
-
-  //     return token
-  //   } catch (error: any) {
-  //     throw new CustomError(400, error.message);
-  //   }
-  // };
-
   
-
-  // public editUser = async (input: EditUserInputDTO) => {
-  //   try {
-  //     const { name, nickname, id, token } = input;
-
-  //     if (!name || !nickname || !id || !token) {
-  //       throw new CustomError(
-  //         400,
-  //         'Preencha os campos "id", "name", "nickname" e "token"'
-  //       );
-  //     }
-
-  //     const data = tokenGenerator.tokenData(token)
-
-  //     // if(!data) {
-  //     //   throw new Unauthorized()
-  //     // }
+  
+  public login = async (input: LoginInputDTO): Promise<string> => {
+    try {
+      //testa se tem email e password
+      const {email,password} = input;
+      if (!email||!password) {
+        throw new InvalidLogin;
+      }
       
-  //     if (name.length < 4) {
-  //       throw new InvalidName();
-  //     }
-  //     //testa autorização
-  //     if(data.role !=UserRole.ADMIN) {
-  //       throw new Unauthorized()
-  //     }
-
-
-  //     const editUserInput: EditUserInput = {
-  //       id,
-  //       name,
-  //       nickname,
-  //     };
-
-  //     const userDatabase = new UserDatabase();
-  //     await userDatabase.editUser(editUserInput);
-  //   } catch (error: any) {
-  //     throw new CustomError(400, error.message);
-  //   }
-  // };
+      //encontar user pelo email
+      const user:UserDTO = await this.userDatabase.findUser(email);
+      if (!user) {
+        throw new UserNotFound;
+      }
+      //testa se a senha bate
+      const isValid = await HashManager.compareHash(password,user.password);
+      if (!isValid) {
+        throw new InvalidPassword;
+      }
+      //gerar token
+      const token = TokenGenerator.generateToken(user.id);
+      return token;
+    } catch (error: any) {
+      throw new CustomError(400, error.message);
+    }
+  };
 }

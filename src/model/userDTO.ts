@@ -7,6 +7,9 @@ export interface LoginInputDTO {
    email: string;
    password:string;
 }   
+export interface ValidateDTO {
+   id: string;
+}   
 
 export interface UserDTO {
    id: string;

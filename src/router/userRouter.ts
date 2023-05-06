@@ -7,7 +7,7 @@ export const userRouter = express.Router()
 const userController = new UserController()
 
 userRouter.post('/singup', userController.singUp)
-// userRouter.post('/login', userController.login )
+userRouter.post('/login', userController.login )
 // userRouter.put('/edit/:id',userController.editUser )
 
 

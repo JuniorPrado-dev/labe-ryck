@@ -13,6 +13,6 @@ CREATE TABLE IF NOT EXISTS characters (
     id VARCHAR(64) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     species VARCHAR(100) NOT NULL,
-    image_url TEXT NOT NULL,
+    image TEXT NOT NULL,
     id_user VARCHAR(100) NOT NULL
 );
