@@ -28,9 +28,7 @@ export class CharacterController {
   public getAllCharacter = async (req: Request, res: Response) => {
     try {
       
-
       const allChactrers:CharacterOutputDTO[]=await this.characterBusiness.getAllCharacter();
-
       res.status(200).send(allChactrers);
     } catch (error: any) {
       res.status(400).send(error.message);

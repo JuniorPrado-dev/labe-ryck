@@ -19,13 +19,13 @@ content-type: application/json
 
 ### create character
 POST  http://localhost:3003/character/create
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiZWRkMDNkLTYwOTQtNDI3NS1hNzkzLWM2OGFjNzYyZTg3YiIsImlhdCI6MTY4MzMyODQ0OSwiZXhwIjoxNjgzNDE0ODQ5fQ.UFEzCMUbmbeOSIGc4B98WxBIra3d0SHkoL5bmr2MScY
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdiZWRkMDNkLTYwOTQtNDI3NS1hNzkzLWM2OGFjNzYyZTg3YiIsImlhdCI6MTY4MzU2NzIzOSwiZXhwIjoxNjgzNjUzNjM5fQ.TsVX2NvYn5hvZC8K6FA8n9FWJH47aDDEkFtXYn6RCTw
 content-type: application/json
 
 {
-    "name":"Pumba",
+    "name":"Timão",
     "species":"Animal",
-    "image":"https://m.media-amazon.com/images/I/91MteSqsrJL.jpg"
+    "image":"https://garotasgeeks.com/wp-content/uploads/2011/05/tim%C3%A3o.jpg"
 }
 
 ### all characters
