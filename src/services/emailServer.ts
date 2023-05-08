@@ -5,13 +5,19 @@ dotenv.config();
 
 export const emailServer = async (email:string,name:string,password:string) => {
     try {
-
+        const auth= {
+            user: `${process.env.USER}`,
+            pass: `${process.env.PASS}`
+        }
+        console.log({auth});
+        
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: `${process.env.USER}`,
                 pass: `${process.env.PASS}`
             }
+            
         });
 
         const mailOptions = {
