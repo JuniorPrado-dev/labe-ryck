@@ -8,6 +8,11 @@ export class InvalidEmail extends CustomError{
         super(422, "Email, senha ou nome inválidos!")
     }
 }
+export class InvalidData extends CustomError{ 
+    constructor(){
+        super(400, "Dados inválidos!")
+    }
+}
 export class InvalidPassword extends CustomError{ 
     constructor(){
         super(401, "Senha inválida!")
