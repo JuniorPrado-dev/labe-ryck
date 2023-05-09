@@ -1,7 +1,7 @@
-import { InvalidPassword } from './../error/customError';
+import { InvalidPassword, InvalidToken } from './../error/customError';
 import { UserDatabase } from "../data/UserDatabase";
 import { CustomError, InvalidEmail, InvalidLogin, UsedEmail, UserNotFound } from "../error/customError";
-import { LoginInputDTO, SingUpInputDTO, UserDTO} from "../model/userDTO";
+import { LoginInputDTO, SingUpInputDTO, UserDTO, UserOutputDTO } from "../model/userDTO";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenGenerator } from "../services/TokenGenerator";
@@ -9,18 +9,18 @@ import { emailServer } from "../services/emailServer";
 
 
 export class UserBusiness {
-  
+
   private userDatabase = new UserDatabase();
   private tokenGenerator = new TokenGenerator()
-  
+
   public singUp = async (input: SingUpInputDTO): Promise<void> => {
     try {
 
-      const {email, name,password} = input;
-      if (!email||!name||!password) {
+      const { email, name, password } = input;
+      if (!email || !name || !password) {
         throw new InvalidEmail;
       }
-      
+
       const userTest = await this.userDatabase.findUser(email);
 
       if (userTest) {
@@ -29,38 +29,38 @@ export class UserBusiness {
       //criptografa senha
       const hash = await HashManager.generateHash(password)
       //add novo user
-      const user:UserDTO ={
+      const user: UserDTO = {
         id: IdGenerator.generateId(),
         name,
         email,
-        password:hash
-      } 
+        password: hash
+      }
       await this.userDatabase.insertUser(user)
       //enviar email
-      await emailServer(user.email,user.name,password);
-      
+      await emailServer(user.email, user.name, password);
+
 
     } catch (error: any) {
       throw new CustomError(400, error.message);
     }
   };
-  
-  
+
+
   public login = async (input: LoginInputDTO): Promise<string> => {
     try {
       //testa se tem email e password
-      const {email,password} = input;
-      if (!email||!password) {
+      const { email, password } = input;
+      if (!email || !password) {
         throw new InvalidLogin;
       }
-      
+
       //encontar user pelo email
-      const user:UserDTO = await this.userDatabase.findUser(email);
+      const user: UserDTO = await this.userDatabase.findUser(email);
       if (!user) {
         throw new UserNotFound;
       }
       //testa se a senha bate
-      const isValid = await HashManager.compareHash(password,user.password);
+      const isValid = await HashManager.compareHash(password, user.password);
       if (!isValid) {
         throw new InvalidPassword;
       }
@@ -71,4 +71,24 @@ export class UserBusiness {
       throw new CustomError(400, error.message);
     }
   };
+  //get user
+  public getUser = async (token: string): Promise<UserOutputDTO> => {
+    try {
+      //testa se tem token
+      if (!token) {
+        throw new InvalidToken;
+      }
+      //testa se o token bate
+      const isValid = TokenGenerator.tokenData(token);
+      if (!isValid) {
+        throw new InvalidToken;
+      }
+      //encontar user pelo id
+      const user: UserOutputDTO = await this.userDatabase.findUserById(isValid.id);
+      
+      return user;
+    }catch (error: any) {
+      throw new CustomError(400, error.message);
+    }
+  }
 }

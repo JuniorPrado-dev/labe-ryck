@@ -1,16 +1,22 @@
+import { UserOutputDTO } from './../model/userDTO';
 import { CustomError } from "../error/customError";
 import { UserDTO } from "../model/userDTO";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class UserDatabase extends BaseDatabase {
   
-  public findUserById = async (id: string) => {
+  public findUserById = async (id: string):Promise<UserOutputDTO> =>{
     try {
   
       const result = await UserDatabase.connection("users")
         .select()
         .where({id});
-      return result[0];
+        const user={
+          id:result[0].id,
+          name:result[0].name
+        }
+             
+        return user;
     } catch (error: any) {
       throw new CustomError(400, error.message);
     }

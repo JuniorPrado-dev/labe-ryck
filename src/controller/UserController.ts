@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { UserBusiness } from "../business/UserBusiness";
-import { LoginInputDTO, SingUpInputDTO } from "../model/userDTO";
+import { LoginInputDTO, SingUpInputDTO, UserOutputDTO } from "../model/userDTO";
 
 export class UserController {
 
@@ -38,59 +38,16 @@ export class UserController {
       res.status(400).send(error.message);
     }
   };
+  //get client
+  public getUser = async (req: Request, res: Response) => {
+    try {
+      const { name, species, image } = req.body;
+      const token = req.headers.authorization as string;
+      const user:UserOutputDTO=await this.userBusiness.getUser(token);
+      res.status(200).send(user);
+    } catch (error: any) {
+      res.status(400).send(error.message);
+    }
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // public sin = async (req: Request, res: Response) => {
-  //   try {
-  //     const { email } = req.body;
-  //     const input: ApiInputDTO = {
-  //       email: email
-  //     };
-  //     const token = await this.ApiBusiness.createApi(input);
-
-  //     res.status(201).send({ message: "Usuário criado!", token });
-  //   } catch (error: any) {
-  //     res.status(400).send(error.message);
-  //   }
-  // };
-
-  // public editApi = async (req: Request, res: Response) => {
-  //   try {
-
-  //     const input: EditApiInputDTO = {
-  //       name: req.body.name,
-  //       nickname: req.body.nickname,
-  //       id: req.params.id,
-  //       token: req.headers.authorization as string
-  //     };
-
-  //     const ApiBusiness = new ApiBusiness()
-  //     console.log(input)
-  //     await ApiBusiness.editApi(input);
-
-  //     res.status(201).send({ message: "Usuário alterado!" });
-  //   } catch (error: any) {
-  //     res.status(400).send(error.message);
-  //   }
-  // };
 }
