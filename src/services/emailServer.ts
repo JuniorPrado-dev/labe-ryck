@@ -9,8 +9,7 @@ export const emailServer = async (email:string,name:string,password:string) => {
             user: `${process.env.USER}`,
             pass: `${process.env.PASS}`
         }
-        console.log({auth});
-        
+
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
