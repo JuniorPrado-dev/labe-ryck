@@ -16,8 +16,8 @@ export class UserBusiness {
   public singUp = async (input: SingUpInputDTO): Promise<void> => {
     try {
 
-      const { email, name, password } = input;
-      if (!email || !name || !password) {
+      const { email, name } = input;
+      if (!email || !name) {
         throw new InvalidEmail;
       }
 
@@ -26,6 +26,15 @@ export class UserBusiness {
       if (userTest) {
         throw new UsedEmail();
       }
+
+      //cria senha aleatória
+      // Gera um número aleatório de 0000 a 9999
+      const randomNumber = Math.floor(Math.random() * 10000);
+
+      // Preenche com zeros à esquerda, se necessário
+      const formattedNumber = String(randomNumber).padStart(4, '0');
+      console.log(formattedNumber);
+      const password = `rick${formattedNumber}`;
       //criptografa senha
       const hash = await HashManager.generateHash(password)
       //add novo user
@@ -85,9 +94,9 @@ export class UserBusiness {
       }
       //encontar user pelo id
       const user: UserOutputDTO = await this.userDatabase.findUserById(isValid.id);
-      
+
       return user;
-    }catch (error: any) {
+    } catch (error: any) {
       throw new CustomError(400, error.message);
     }
   }

@@ -2,7 +2,6 @@
 export interface SingUpInputDTO {
    email: string;
    name:string;
-   password:string;
 }
 
 export interface UserOutputDTO {

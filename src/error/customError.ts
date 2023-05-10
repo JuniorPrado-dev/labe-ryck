@@ -5,7 +5,7 @@ export class CustomError extends Error {
 }
 export class InvalidEmail extends CustomError{ 
     constructor(){
-        super(422, "Email, senha ou nome inválidos!")
+        super(422, "Email ou nome inválidos!")
     }
 }
 export class InvalidData extends CustomError{ 

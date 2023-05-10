@@ -11,13 +11,12 @@ export class UserController {
       const {email,name,password} = req.body;
       const input: SingUpInputDTO = {
         name,
-        email,
-        password
+        email
       };
       
       await this.userBusiness.singUp(input);
 
-      res.status(200).send({ message: "Usuario Criado com sucesso! Verifique seu email!"});
+      res.status(200).send({ message: "Usuario Criado com sucesso! Senha enviada para seu email!"});
     } catch (error: any) {
       res.status(400).send(error.message);
     }
