@@ -1,6 +1,5 @@
 node_modules
 build
-*.db
 .env
 request.rest
 .vscode
